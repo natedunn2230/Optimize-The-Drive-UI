@@ -4,11 +4,11 @@ import './App.css';
 
 export default class App extends React.Component {
 
-  render(){
-    return (
-      <MapPageView/>
-    );
-  }
-  
+    render(){
+        return (
+            <MapPageView/>
+        );
+    }
+
 }
 
