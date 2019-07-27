@@ -1,12 +1,18 @@
 import React from 'react';
 
+import './Table.css';
+
 export default class TableView extends React.Component {
 
     render(){
         return(
             <div>
-                <h2>A table will render here</h2>
+                <h1>{this.props.title}</h1>
+                <table id="table">
+                    {this.props.children}
+                </table>
             </div>
+
         );
     }
 }
