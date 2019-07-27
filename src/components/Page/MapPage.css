@@ -1,0 +1,10 @@
+#map-page {
+    text-align: center;
+    
+}
+#page-header{
+    font-size: 3rem;
+    color: white;
+    margin: 0 auto;
+    text-shadow: .1rem .1rem #1B264F;
+}
