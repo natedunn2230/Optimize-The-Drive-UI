@@ -5,9 +5,9 @@ export default class HeadView extends React.Component {
     generateHead(){
         let headers = this.props.head;
 
-        return headers.map(val => {
+        return headers.map((val, index) => {
             return(
-                <th>
+                <th key={`header-${index}`}>
                     {val}
                 </th>
             );

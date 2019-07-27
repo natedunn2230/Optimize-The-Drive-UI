@@ -7,12 +7,13 @@ export default class TableView extends React.Component {
     render(){
         return(
             <div>
-                <h1>{this.props.title}</h1>
+                <h1 className="title">{this.props.title}</h1>
                 <table id="table">
-                    {this.props.children}
+                    <tbody>
+                        {this.props.children}
+                    </tbody>
                 </table>
             </div>
-
         );
     }
 }

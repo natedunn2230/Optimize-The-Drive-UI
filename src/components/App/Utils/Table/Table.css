@@ -4,6 +4,11 @@
     width: 100%;
 }
 
+#title {
+    padding: 0rem;
+    margin: 0rem;
+}
+
 #table td, th {
     border: .1rem solid #ddd;
     padding: .8rem;
