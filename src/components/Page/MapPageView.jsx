@@ -1,5 +1,5 @@
 import React from 'react'
-import MapView from '../Map/MapView'
+import MapView from '../App/Map/MapView'
 
 export default class MapPageView extends React.Component {
 
