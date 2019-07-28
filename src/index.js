@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-
 import './index.css';
+
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-const stores = {};
+import MapStore from './stores/MapStore';
+
+const stores = {
+    MapStore
+};
 
 ReactDOM.render(
     <Provider {...stores}>

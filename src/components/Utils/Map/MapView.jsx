@@ -1,5 +1,7 @@
 import React from 'react';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { inject, observer } from 'mobx-react';
+
 import './Map.css'
 
 const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -7,30 +9,24 @@ const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenS
 const mapCenter = [40, -84];
 const zoomLevel = 6;
 
-export default class MapView extends React.Component{
+class MapView extends React.Component{
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            markers: [],
-        };
-
+        this.store = this.props.MapStore;
         this.addMarker = this.addMarker.bind(this);
     }
 
     addMarker(e) {
-        const updatedMarkers = this.state.markers;
-        updatedMarkers.push(e.latlng);
-
-        this.setState({markers: updatedMarkers});
+        this.store.addMarker(e.latlng);
     }
 
     renderMarker() {
-        return this.state.markers.map((pos, index) => {
+        return this.store.markers.map((pos, index) => {
             return(
                 <Marker key={`marker-${index}`} position={pos}>
-                    <Popup>Something</Popup>
+                    <Popup>{`${pos.lat},${pos.lng}`}</Popup>
                 </Marker>
             )
         })
@@ -54,8 +50,6 @@ export default class MapView extends React.Component{
         );
     }
 
-    componentDidMount() {
-    
-    }
-
 }
+
+export default inject('MapStore')(observer(MapView));
