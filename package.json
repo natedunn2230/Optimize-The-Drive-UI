@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "leaflet": "^1.5.1",
+    "leaflet-geosearch": "^2.7.0",
     "mobx": "^5.13.0",
     "mobx-react": "^6.1.1",
     "react": "^16.8.6",

@@ -1,6 +1,8 @@
 import React from 'react';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Map, TileLayer, Marker, Popup, withLeaflet } from 'react-leaflet';
 import { inject, observer } from 'mobx-react';
+
+import Search from './SearchView';
 
 import './Map.css'
 
@@ -36,10 +38,14 @@ class MapView extends React.Component {
     }
 
     render() {
+
+        const SearchBar = withLeaflet(Search);
+        
         return (
             <div id="map">
                 <Map
-                    onClick={this.addMarker}
+                    doubleClickZoom={false}
+                    onDblClick={this.addMarker}
                     center={mapCenter}
                     zoom={zoomLevel}
                 >
@@ -48,6 +54,7 @@ class MapView extends React.Component {
                         url={tileURL}
                     />
                     {this.renderMarker()}
+                    <SearchBar/>
                 </Map>
             </div>
         );
