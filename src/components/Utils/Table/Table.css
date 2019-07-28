@@ -9,6 +9,12 @@
     margin: 0rem;
 }
 
+#scroll {
+    overflow: scroll;
+    width: 100%;
+    height:10rem;
+}
+
 #table td, th {
     border: .1rem solid #ddd;
     padding: .8rem;
@@ -20,6 +26,10 @@
 
 #table tr:nth-child(even){
     background-color: #f2f2f2;
+}
+
+#table tr:hover{
+    background-color: lightgrey;
 }
 
 #table th {

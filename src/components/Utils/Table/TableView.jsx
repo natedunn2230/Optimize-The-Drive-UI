@@ -8,11 +8,13 @@ export default class TableView extends React.Component {
         return(
             <div>
                 <h1 className="title">{this.props.title}</h1>
-                <table id="table">
-                    <tbody>
-                        {this.props.children}
-                    </tbody>
-                </table>
+                <div id="scroll">   
+                    <table id="table">
+                        <tbody>
+                            {this.props.children}
+                        </tbody>
+                    </table> 
+                </div>
             </div>
         );
     }

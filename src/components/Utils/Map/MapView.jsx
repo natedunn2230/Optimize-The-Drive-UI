@@ -9,31 +9,34 @@ const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenS
 const mapCenter = [40, -84];
 const zoomLevel = 6;
 
-class MapView extends React.Component{
+class MapView extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.store = this.props.MapStore;
+        this.mapStore = this.props.MapStore;
+        this.locationStore = this.props.LocationStore;
+        console.log(props);
         this.addMarker = this.addMarker.bind(this);
     }
 
     addMarker(e) {
-        this.store.addMarker(e.latlng);
+        this.mapStore.addMarker(e);
+        this.locationStore.addLocation(e.latlng);
     }
 
     renderMarker() {
-        return this.store.markers.map((pos, index) => {
-            return(
-                <Marker key={`marker-${index}`} position={pos}>
-                    <Popup>{`${pos.lat},${pos.lng}`}</Popup>
+        return this.mapStore.markers.map((marker, index) => {
+            return (
+                <Marker key={`marker-${index}`} position={marker.latlng}>
+                    <Popup>{`${marker.latlng.lat},${marker.latlng.lng}`}</Popup>
                 </Marker>
             )
         })
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div id="map">
                 <Map
                     onClick={this.addMarker}
@@ -46,10 +49,10 @@ class MapView extends React.Component{
                     />
                     {this.renderMarker()}
                 </Map>
-            </div> 
+            </div>
         );
     }
 
 }
 
-export default inject('MapStore')(observer(MapView));
+export default inject('MapStore', 'LocationStore')(observer(MapView));
