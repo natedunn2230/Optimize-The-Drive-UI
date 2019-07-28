@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import MapView from '../Utils/Map/MapView';
 import TableView from '../Utils/Table/TableView';
 import RowView from '../Utils/Table/Row/RowView';
-import HeadView from '../Utils/Table/Head/HeadView';
 
 import './Styles.css';
 
@@ -21,7 +20,7 @@ class Home extends React.Component {
         return(
             this.locationStore.locations.map((location, index) => {
                 return(
-                    <RowView 
+                    <RowView key={`row-${index}`}
                         data={[`${index + 1}`, `${location.lat}, ${location.lng}`]}
                     />
                 );
@@ -34,8 +33,11 @@ class Home extends React.Component {
             <div id="map-page">
                 <span id="page-header" className="text-shadow">Optimize The Drive</span>
                 <MapView/>
-                <TableView className="text-shadow" title="Locations">
-                    <HeadView head={["NUMBER", "LOCATION"]}/>
+                <TableView 
+                    className="text-shadow"
+                    title="Locations"
+                    head={["NUMBER", "LOCATION"]}
+                >
                     {this.renderRows()}
                 </TableView>
             </div>
