@@ -1,12 +1,12 @@
 import React from 'react';
-import MapView from '../App/Map/MapView';
-import TableView from '../App/Utils/Table/TableView';
-import RowView from '../App/Utils/Table/Row/RowView';
-import HeadView from '../App/Utils/Table/Head/HeadView';
+import MapView from '../Utils/Map/MapView';
+import TableView from '../Utils/Table/TableView';
+import RowView from '../Utils/Table/Row/RowView';
+import HeadView from '../Utils/Table/Head/HeadView';
 
-import './MapPage.css';
+import './Styles.css';
 
-export default class MapPageView extends React.Component {
+export default class Home extends React.Component {
 
     render(){
         return(
