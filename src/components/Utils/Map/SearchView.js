@@ -1,20 +1,30 @@
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import {MapControl }from 'react-leaflet';
+import { MapControl }from 'react-leaflet';
 
 class Search extends MapControl {
 
     createLeafletElement() {
-        return GeoSearchControl({
+        return this.searchControl = new GeoSearchControl({
             provider: new OpenStreetMapProvider(),
             style: 'button',
             showMarker: true,
             showPopup: false,
-            autoClose: true,
+            popupFormat: ({query, result}) => console.log(result),
+            autoClose: false,
             retainZoomLevel: false,
             animateZoom: true,
-            keepResult: false,
-            searchLabel: 'search'
+            keepResult: true,
+            autoCompleteDelay: 100,
+            searchLabel: 'Enter',
         });
+    }
+
+    getResult(){
+        let x = this.searchControl.result;
+    }
+
+    getResult(){
+
     }
 }
 
