@@ -1,15 +1,10 @@
 import React from 'react';
-import { Map, TileLayer, Marker, Popup, withLeaflet } from 'react-leaflet';
+import L from 'leaflet';
+import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { inject, observer } from 'mobx-react';
 
-import Search from './SearchView';
-
 import './Map.css'
-
-const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-const mapCenter = [40, -84];
-const zoomLevel = 6;
 
 class MapView extends React.Component {
 
@@ -18,43 +13,80 @@ class MapView extends React.Component {
 
         this.mapStore = this.props.MapStore;
         this.locationStore = this.props.LocationStore;
-        console.log(props);
-        this.addMarker = this.addMarker.bind(this);
+        this.storeClickedLocation = this.storeClickedLocation.bind(this);
+
+        this.mapRef = React.createRef();
+
     }
 
-    addMarker(e) {
-        this.mapStore.addMarker(e);
-        this.locationStore.addLocation(e.latlng);
+    storeClickedLocation(e) {
+        let location = {};
+
+        location.latlng = e.latlng;
+        location.label = "";
+
+        this.mapStore.addLocation(location);
+    }
+
+    storeSearchedLocation(loc) {
+        let location = {};
+
+        location.latlng = new L.LatLng(loc.y, loc.x);
+        location.label = loc.label;
+        
+        this.mapStore.addLocation(location);
     }
 
     renderMarker() {
-        return this.mapStore.markers.map((marker, index) => {
+        return this.mapStore.locations.map((location, index) => {
             return (
-                <Marker key={`marker-${index}`} position={marker.latlng}>
-                    <Popup>{`${marker.latlng.lat},${marker.latlng.lng}`}</Popup>
+                <Marker key={`marker-${index}`} position={location.latlng}>
+                    <Popup>{`${location.lat},${location.lng}`}</Popup>
                 </Marker>
             )
         })
     }
 
+    componentDidMount(){
+        const map = this.mapRef.current.leafletElement;
+
+        const searchControl = new GeoSearchControl({
+            provider: new OpenStreetMapProvider(),
+            style: 'button',
+            autoClose: false,
+            retainZoomLevel: false,
+            animateZoom: true,
+            keepResult: false,
+            autoCompleteDelay: 100,
+            searchLabel: 'Enter',
+        }).addTo(map);
+
+        map.on('geosearch/showlocation', (result) => {
+            this.storeSearchedLocation(result.location);
+        })
+    }
+
     render() {
 
-        const SearchBar = withLeaflet(Search);
+        // default attributes for map
+        const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        const mapCenter = [40, -84];
+        const zoomLevel = 6;
         
         return (
             <div id="map">
                 <Map
                     doubleClickZoom={false}
-                    onDblClick={this.addMarker}
+                    onDblClick={this.storeClickedLocation}
                     center={mapCenter}
                     zoom={zoomLevel}
-                >
+                    ref={this.mapRef}>
                     <TileLayer
                         attribution={tileAttr}
                         url={tileURL}
                     />
                     {this.renderMarker()}
-                    <SearchBar/>
                 </Map>
             </div>
         );
@@ -62,4 +94,4 @@ class MapView extends React.Component {
 
 }
 
-export default inject('MapStore', 'LocationStore')(observer(MapView));
+export default inject('MapStore')(observer(MapView));

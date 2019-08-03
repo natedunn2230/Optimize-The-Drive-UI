@@ -7,11 +7,9 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
 import MapStore from './stores/MapStore';
-import LocationStore from './stores/LocationStore';
 
 const stores = {
-    MapStore,
-    LocationStore
+    MapStore
 };
 
 ReactDOM.render(

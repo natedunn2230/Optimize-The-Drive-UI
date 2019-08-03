@@ -2,16 +2,18 @@ import { observable, action, computed, decorate } from 'mobx';
 
 
 class MapStore {
-    markers = [];
 
-    addMarker(marker){
-        this.markers.push(marker);
+    // array of objects {latlng: "", label: ""}
+    locations = [];
+
+    addLocation(location){
+        this.locations.push(location);
     }
 }
 
 decorate(MapStore, {
-    markers: observable,
-    addMarker: action
+    locations: observable,
+    addLocations: action
 });
 
 export default new MapStore();

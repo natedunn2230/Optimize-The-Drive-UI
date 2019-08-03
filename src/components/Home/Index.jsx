@@ -11,17 +11,17 @@ class Home extends React.Component {
 
     constructor(props){
         super(props);
-        this.locationStore = this.props.LocationStore;
+        this.mapStore = this.props.MapStore;
 
-        this.renderRows = this.renderRows.bind(this);
+        this.renderSelectedLocations = this.renderSelectedLocations.bind(this);
     }
 
-    renderRows(){
+    renderSelectedLocations(){
         return(
-            this.locationStore.locations.map((location, index) => {
+            this.mapStore.locations.map((location, index) => {
                 return(
                     <RowView key={`row-${index}`}
-                        data={[`${index + 1}`, `${location.lat}, ${location.lng}`]}
+                        data={[`${index + 1}`, `${location.label}`, `${location.latlng.lat}, ${location.latlng.lng}`]}
                     />
                 );
             })
@@ -36,9 +36,9 @@ class Home extends React.Component {
                 <TableView 
                     className="text-shadow"
                     title="Locations"
-                    head={["NUMBER", "LOCATION"]}
+                    head={["Number", "Name", "Location"]}
                 >
-                    {this.renderRows()}
+                    {this.renderSelectedLocations()}
                 </TableView>
             </div>
             
@@ -46,4 +46,4 @@ class Home extends React.Component {
     }
 }
 
-export default inject('LocationStore')(observer(Home));
+export default inject('MapStore')(observer(Home));

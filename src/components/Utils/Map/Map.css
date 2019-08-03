@@ -6,3 +6,7 @@
     padding: 0;
     box-shadow: .25rem .25rem .25rem .25rem grey;
 }
+
+.geocoder-control-input {
+    background-image: url("https://raw.githubusercontent.com/Esri/esri-leaflet-geocoder/master/src/img/search.png");
+}
