@@ -1,0 +1,10 @@
+#banner {
+    background-color: grey;
+}
+
+
+#banner-text {
+    font-size: 3rem;
+    color: black;
+    text-shadow: .1rem .1rem .3rem  grey;
+}

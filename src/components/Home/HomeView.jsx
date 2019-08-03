@@ -4,8 +4,9 @@ import { inject, observer } from 'mobx-react';
 import MapView from '../Utils/Map/MapView';
 import TableView from '../Utils/Table/TableView';
 import RowView from '../Utils/Table/Row/RowView';
+import BannerView from '../Banner/BannerView';
 
-import './Styles.css';
+import './Home.css';
 
 class Home extends React.Component {
 
@@ -31,7 +32,7 @@ class Home extends React.Component {
     render(){
         return(
             <div id="map-page">
-                <span id="page-header" className="text-shadow">Optimize The Drive</span>
+                <BannerView/>
                 <MapView/>
                 <TableView 
                     className="text-shadow"
