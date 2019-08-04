@@ -1,10 +1,16 @@
 #banner {
-    background-color: grey;
+    background-image: linear-gradient(#4A6FA5, #166088);
+    text-align: center;
+    height: auto;
+    border: .1rem solid black;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
 }
 
 
 #banner-text {
     font-size: 3rem;
-    color: black;
-    text-shadow: .1rem .1rem .3rem  grey;
+    font: bold;
+    color: #ededed;
+    text-shadow: .15em .1rem .75rem  black;
 }

@@ -1,4 +1,20 @@
 #map-page {
-    text-align: center;
-    
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+#map {
+    position: absolute;
+    width: 100vw;
+    height: 90vh;
+}
+
+#table-stuff {
+    position: absolute;
+    z-index: 1000;
+    width: 85%;
+    left: 7.5vw;
+    bottom: 1%;
 }

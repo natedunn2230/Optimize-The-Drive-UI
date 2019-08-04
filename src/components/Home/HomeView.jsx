@@ -10,17 +10,17 @@ import './Home.css';
 
 class Home extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.mapStore = this.props.MapStore;
 
         this.renderSelectedLocations = this.renderSelectedLocations.bind(this);
     }
 
-    renderSelectedLocations(){
-        return(
+    renderSelectedLocations() {
+        return (
             this.mapStore.locations.map((location, index) => {
-                return(
+                return (
                     <RowView key={`row-${index}`}
                         data={[`${index + 1}`, `${location.label}`, `${location.latlng.lat}, ${location.latlng.lng}`]}
                     />
@@ -29,20 +29,25 @@ class Home extends React.Component {
         );
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div id="map-page">
-                <BannerView/>
-                <MapView/>
-                <TableView 
-                    className="text-shadow"
-                    title="Locations"
-                    head={["Number", "Name", "Location"]}
-                >
-                    {this.renderSelectedLocations()}
-                </TableView>
+                <BannerView />
+                <div id="map">
+                    <MapView />
+                </div>
+
+                <div id="table-stuff"> 
+                    <TableView
+                        className="text-shadow"
+                        title="Locations"
+                        head={["Number", "Name", "Location"]}
+                    >
+                        {this.renderSelectedLocations()}
+                    </TableView>
+                </div>
             </div>
-            
+
         );
     }
 }

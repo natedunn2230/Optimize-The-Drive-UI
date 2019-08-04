@@ -23,7 +23,7 @@ class MapView extends React.Component {
         let location = {};
 
         location.latlng = e.latlng;
-        location.label = "";
+        location.label = "N/A";
 
         this.mapStore.addLocation(location);
     }
@@ -41,7 +41,7 @@ class MapView extends React.Component {
         return this.mapStore.locations.map((location, index) => {
             return (
                 <Marker key={`marker-${index}`} position={location.latlng}>
-                    <Popup>{`${location.lat},${location.lng}`}</Popup>
+                    <Popup>{`${location.latlng.lat},${location.latlng.lng}`}</Popup>
                 </Marker>
             )
         })
@@ -53,7 +53,7 @@ class MapView extends React.Component {
         const searchControl = new GeoSearchControl({
             provider: new OpenStreetMapProvider(),
             style: 'button',
-            autoClose: false,
+            autoClose:true,
             retainZoomLevel: false,
             animateZoom: true,
             keepResult: false,
