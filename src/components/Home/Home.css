@@ -18,3 +18,30 @@
     left: 7.5vw;
     bottom: 1%;
 }
+
+#optimize-btn {
+    position: absolute;
+    left: 50%;
+    width: 50%;
+    transform: translate(-50%, calc(-100% - 1vh));
+    margin-bottom: 2rem;
+    padding: 1rem 2rem 1rem 2rem;
+    border-radius: .5rem;
+    background-image: linear-gradient(to right, #4a6fa5, #00265f);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    box-shadow: .2rem .2rem .5rem gray;
+}
+
+#optimize-btn:hover {
+    background-image: none;
+    background-color: #081a35;
+}
+
+.disabled {
+    cursor: not-allowed !important;
+    background-image: linear-gradient(grey, darkgrey) !important;
+}

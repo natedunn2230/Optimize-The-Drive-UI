@@ -15,6 +15,7 @@ class Home extends React.Component {
         this.mapStore = this.props.MapStore;
 
         this.renderSelectedLocations = this.renderSelectedLocations.bind(this);
+        this.optimizeRoutes = this.optimizeRoutes.bind(this);
     }
 
     renderSelectedLocations() {
@@ -29,6 +30,8 @@ class Home extends React.Component {
         );
     }
 
+    optimizeRoutes() { this.mapStore.sendLocationsToOptimizer() };
+
     render() {
         return (
             <div id="map-page">
@@ -36,8 +39,13 @@ class Home extends React.Component {
                 <div id="map">
                     <MapView />
                 </div>
-
-                <div id="table-stuff"> 
+                <div id="table-stuff">
+                    <button id="optimize-btn" 
+                        className={this.mapStore.locations.length < 5 ? "disabled" : ""}
+                        onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
+                    >
+                        OPTIMIZE
+                    </button> 
                     <TableView
                         className="text-shadow"
                         title="Locations"
