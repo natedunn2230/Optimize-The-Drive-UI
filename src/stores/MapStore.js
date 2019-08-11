@@ -3,13 +3,13 @@ import axios from 'axios';
 
 class MapStore {
 
-    optimizerUrl = 'optimize-the-drive-api.herokuapp.com';
+    optimizerUrl = 'http://optimize-the-drive-api.herokuapp.com';
 
     // array of objects {latlng: "", label: ""}
     locations = [];
     optimizedLocations = [];
 
-    addLocation(location){
+    addLocation(location) {
         this.locations.push(location);
     }
 
@@ -26,8 +26,33 @@ class MapStore {
                 unoptimizedLocations.push(`${location.latlng.lat}, ${location.latlng.lng}`)
         });
 
-        axios.post('http://optimize-the-drive-api.herokuapp.com/optimize', {'locations': unoptimizedLocations})
-        .then((res) => {console.log(res.data)});
+        this.locations = [];
+
+        // post the unoptimized locations to the server
+        axios.post(`${this.optimizerUrl}/optimize`, {'locations': unoptimizedLocations})
+        .then((res) => {
+
+            let resultID = res.data.id;
+            
+            // repeatedly poll the server for the result...since the optimization takes time, we dont 
+            // know when it will be finished
+            setTimeout(()=> {this.pollResult(resultID)}, 5000);
+
+        }).catch((err) => {console.log(`an error occurred during server communication: ${err}`)});
+    }
+
+    pollResult(resultID) {
+
+        // repeatedly polls for location
+        axios.get(`${this.optimizerUrl}/optimize/result/${resultID}`).then((res) => {
+            if(res.data.status === 'in-progress'){
+                setTimeout(()=> {this.pollResult(resultID)}, 5000);
+
+            } else {
+                this.optimizedLocations = res.data.data;
+            }
+        
+        });
     }
 }
 
