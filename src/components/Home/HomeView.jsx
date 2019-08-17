@@ -18,6 +18,7 @@ class Home extends React.Component {
         this.optimizeRoutes = this.optimizeRoutes.bind(this);
     }
 
+    // adds the selected locations to the table
     renderSelectedLocations() {
         return (
             this.mapStore.locations.map((location, index) => {
@@ -28,6 +29,23 @@ class Home extends React.Component {
                 );
             })
         );
+    }
+
+    // adds optimized locations in the order they should be visited to the table
+    renderOptimizedLocations()  {
+        if(this.mapStore.finishedOptimizing){ 
+            return (
+                this.mapStore.optimizedLocations.map((location, index) => {
+                    if(index != this.mapStore.optimizedLocations.length - 1){
+                        return (
+                            <RowView key={`row-${index}`}
+                                data={[`${index + 1}`, `${"N/A"}`, `${location.lat}, ${location.lng}`]}
+                            />
+                        );
+                    }
+                })
+            );
+        }
     }
 
     optimizeRoutes() { this.mapStore.sendLocationsToOptimizer() };
@@ -52,6 +70,7 @@ class Home extends React.Component {
                         head={["Number", "Name", "Location"]}
                     >
                         {this.renderSelectedLocations()}
+                        {this.renderOptimizedLocations()}
                     </TableView>
                 </div>
             </div>

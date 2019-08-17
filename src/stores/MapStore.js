@@ -1,13 +1,15 @@
 import { observable, action, computed, decorate } from 'mobx';
+import L from 'leaflet';
 import axios from 'axios';
 
 class MapStore {
 
     optimizerUrl = 'http://optimize-the-drive-api.herokuapp.com';
 
-    // array of objects {latlng: "", label: ""}
-    locations = [];
-    optimizedLocations = [];
+    locations = []; // array of objects {latlng: "", label: ""}
+    optimizedLocations = []; // array of latLng
+
+    finishedOptimizing = false;
 
     addLocation(location) {
         this.locations.push(location);
@@ -49,7 +51,22 @@ class MapStore {
                 setTimeout(()=> {this.pollResult(resultID)}, 5000);
 
             } else {
-                this.optimizedLocations = res.data.data;
+                let result = res.data.data; // ['1.2, 2.1' , '3.2, 1.2']
+
+                // parse result into correct latLng object
+                result.forEach((result, i ) => {
+                    let tokens = result.split(',');
+
+                    let lat = parseFloat(tokens[0]);
+                    let lng = parseFloat(tokens[1]);
+
+                    this.optimizedLocations.push(new L.latLng(lat, lng));
+                });
+
+                // adding first location as last location to create a circular path
+                this.optimizedLocations.push(this.optimizedLocations[0]);
+
+                this.finishedOptimizing = true;
             }
         
         });
@@ -59,6 +76,7 @@ class MapStore {
 decorate(MapStore, {
     locations: observable,
     optimizedLocations: observable,
+    finishedOptimizing: observable,
     addLocations: action,
     sendLocationsToOptimizer: action
 });

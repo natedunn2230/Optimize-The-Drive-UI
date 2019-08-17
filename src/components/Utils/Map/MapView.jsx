@@ -2,9 +2,11 @@ import React from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import 'leaflet-routing-machine';
 import { inject, observer } from 'mobx-react';
 
-import './Map.css'
+import './Map.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
 class MapView extends React.Component {
 
@@ -20,21 +22,32 @@ class MapView extends React.Component {
     }
 
     storeClickedLocation(e) {
-        let location = {};
 
-        location.latlng = e.latlng;
-        location.label = "N/A";
+        // only want to store clicked locations before the optimization process
+        // has begun and has no results
+        if(this.mapStore.optimizedLocations.length == 0){
+            let location = {};
 
-        this.mapStore.addLocation(location);
+            location.latlng = e.latlng;
+            location.label = "N/A";
+    
+            this.mapStore.addLocation(location);
+        
+        }
     }
 
     storeSearchedLocation(loc) {
-        let location = {};
 
-        location.latlng = new L.LatLng(loc.y, loc.x);
-        location.label = loc.label;
-        
-        this.mapStore.addLocation(location);
+        // only want to store searched locations before the optimization process
+        // has begun and has no results
+        if(this.mapStore.optimizedLocations.length == 0){
+            let location = {};
+
+            location.latlng = new L.LatLng(loc.y, loc.x);
+            location.label = loc.label;
+            
+            this.mapStore.addLocation(location);
+        }
     }
 
     renderMarker() {
@@ -66,6 +79,17 @@ class MapView extends React.Component {
         })
     }
 
+    showOptimizedPath(){ 
+        if(this.mapStore.finishedOptimizing){
+            const map = this.mapRef.current.leafletElement;
+            const routingControl = new L.Routing.control({
+                waypoints: this.mapStore.optimizedLocations,
+                routeWhileDragging: false,
+                show: false
+            }).addTo(map);
+        }
+    }
+
     render() {
 
         // default attributes for map
@@ -73,7 +97,8 @@ class MapView extends React.Component {
         const tileAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         const mapCenter = [40, -84];
         const zoomLevel = 6;
-        
+
+        this.showOptimizedPath();
         return (
             <div id="map">
                 <Map
