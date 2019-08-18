@@ -1,0 +1,14 @@
+#loading {
+    display: flex;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 1.5rem;
+}
+
+#loading-header {
+    color: #4a6fa5;
+    font-weight: bold;
+    font-size: 1.25rem;
+    transform: translateY(40%);
+    margin-right: 1.5rem;
+}

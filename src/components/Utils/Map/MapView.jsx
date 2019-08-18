@@ -2,7 +2,7 @@ import React from 'react';
 import L from 'leaflet';
 import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-//import 'leaflet-routing-machine';
+import 'leaflet-routing-machine';
 import { inject, observer } from 'mobx-react';
 
 import './Map.css';
@@ -18,7 +18,6 @@ class MapView extends React.Component {
         this.storeClickedLocation = this.storeClickedLocation.bind(this);
 
         this.mapRef = React.createRef();
-
     }
 
     storeClickedLocation(e) {
@@ -80,14 +79,14 @@ class MapView extends React.Component {
     }
 
     showOptimizedPath(){ 
-        // if(this.mapStore.finishedOptimizing){
-        //     const map = this.mapRef.current.leafletElement;
-        //     const routingControl = new L.Routing.control({
-        //         waypoints: this.mapStore.optimizedLocations,
-        //         routeWhileDragging: false,
-        //         show: false
-        //     }).addTo(map);
-        // }
+        if(this.mapStore.finishedOptimizing){
+            
+            const map = this.mapRef.current.leafletElement;
+            const routingControl = new L.Routing.control({
+                waypoints: this.mapStore.optimizedLocations,
+                routeWhileDragging: false,
+            }).addTo(map);
+        }
     }
 
     render() {

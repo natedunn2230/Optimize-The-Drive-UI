@@ -10,6 +10,7 @@ class MapStore {
     optimizedLocations = []; // array of latLng
 
     finishedOptimizing = false;
+    optimizing = false;
 
     addLocation(location) {
         this.locations.push(location);
@@ -17,10 +18,12 @@ class MapStore {
 
     clearLocations() {
         this.locations = [];
+        this.optimizedLocations = [];
     }
 
     sendLocationsToOptimizer() {
 
+        this.optimizing = true;
         // add location data to a specific format that is needed by 
         // the optimizer (i.e array of labels and/or "lat, long")
         let unoptimizedLocations = [];
@@ -44,7 +47,12 @@ class MapStore {
             // know when it will be finished
             setTimeout(()=> {this.pollResult(resultID)}, 5000);
 
-        }).catch((err) => {console.log(`an error occurred during server communication: ${err}`)});
+        }).catch((err) => {
+            console.log(`an error occurred during server communication: ${err}`);
+
+            this.optimizing = false;
+            alert('Could not optimize your route');
+        });
     }
 
     pollResult(resultID) {
@@ -71,6 +79,7 @@ class MapStore {
                 this.optimizedLocations.push(this.optimizedLocations[0]);
 
                 this.finishedOptimizing = true;
+                this.optimizing = false;
             }
         
         });
@@ -81,6 +90,7 @@ decorate(MapStore, {
     locations: observable,
     optimizedLocations: observable,
     finishedOptimizing: observable,
+    optimizing: observable,
     addLocations: action,
     sendLocationsToOptimizer: action
 });

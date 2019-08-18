@@ -78,3 +78,11 @@
     background-image: none !important;
     background-color: darkgray !important;
 }
+
+#loading-contents {
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%);
+}

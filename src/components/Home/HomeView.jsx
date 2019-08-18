@@ -6,6 +6,7 @@ import MapView from '../Utils/Map/MapView';
 import TableView from '../Utils/Table/TableView';
 import RowView from '../Utils/Table/Row/RowView';
 import BannerView from '../Banner/BannerView';
+import LoadingView from '../Loading/LoadingView';
 
 import './Home.css';
 
@@ -61,6 +62,9 @@ class Home extends React.Component {
                 <div id="map">
                     <MapView />
                 </div>
+                <div id="loading-contents">
+                    {this.mapStore.optimizing && <LoadingView/>}
+                </div>
                 <div id="table-stuff">
                     <button id="optimize-btn" 
                         className={this.mapStore.locations.length < 5 ? "disabled" : ""}
@@ -69,8 +73,8 @@ class Home extends React.Component {
                         OPTIMIZE
                     </button>
                     <button id="clear-btn" 
-                        className={this.mapStore.locations.length < 1 ? "disabled" : ""}
-                        onClick={this.mapStore.locations.length < 1 ? () => {} : this.clearRoutes}
+                        className={(this.mapStore.locations.length < 1 && !this.mapStore.finishedOptimizing) ? "disabled" : ""}
+                        onClick={(this.mapStore.locations.length < 1 && !this.mapStore.finishedOptimizing) ? () => {} : this.clearRoutes}
                     >
                         RESTART
                     </button>
