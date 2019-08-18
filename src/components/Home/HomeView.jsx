@@ -17,6 +17,7 @@ class Home extends React.Component {
 
         this.renderSelectedLocations = this.renderSelectedLocations.bind(this);
         this.optimizeRoutes = this.optimizeRoutes.bind(this);
+        this.clearRoutes = this.clearRoutes.bind(this);
     }
 
     // adds the selected locations to the table
@@ -51,6 +52,8 @@ class Home extends React.Component {
 
     optimizeRoutes() { this.mapStore.sendLocationsToOptimizer() };
 
+    clearRoutes() { this.mapStore.clearLocations() };
+
     render() {
         return (
             <div id="map-page">
@@ -58,24 +61,28 @@ class Home extends React.Component {
                 <div id="map">
                     <MapView />
                 </div>
-                <Draggable>
-                    <div id="table-stuff">
-                        <button id="optimize-btn" 
-                            className={this.mapStore.locations.length < 5 ? "disabled" : ""}
-                            onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
-                        >
-                            OPTIMIZE
-                        </button> 
-                        <TableView
-                            className="text-shadow"
-                            title="Locations"
-                            head={["Number", "Name", "Location"]}
-                        >
-                            {this.renderSelectedLocations()}
-                            {this.renderOptimizedLocations()}
-                        </TableView>
-                    </div>
-                </Draggable>
+                <div id="table-stuff">
+                    <button id="optimize-btn" 
+                        className={this.mapStore.locations.length < 5 ? "disabled" : ""}
+                        onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
+                    >
+                        OPTIMIZE
+                    </button>
+                    <button id="clear-btn" 
+                        className={this.mapStore.locations.length < 1 ? "disabled" : ""}
+                        onClick={this.mapStore.locations.length < 1 ? () => {} : this.clearRoutes}
+                    >
+                        RESTART
+                    </button>
+                    <TableView
+                        className="text-shadow"
+                        title="Locations"
+                        head={["Number", "Name", "Location"]}
+                    >
+                        {this.renderSelectedLocations()}
+                        {this.renderOptimizedLocations()}
+                    </TableView>
+                </div>
             </div>
 
         );

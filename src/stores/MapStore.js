@@ -15,6 +15,10 @@ class MapStore {
         this.locations.push(location);
     }
 
+    clearLocations() {
+        this.locations = [];
+    }
+
     sendLocationsToOptimizer() {
 
         // add location data to a specific format that is needed by 
