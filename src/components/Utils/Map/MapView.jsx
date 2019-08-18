@@ -4,6 +4,7 @@ import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import 'leaflet-routing-machine';
 import { inject, observer } from 'mobx-react';
+import { Resizable } from 'react-resizable';
 
 import './Map.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';

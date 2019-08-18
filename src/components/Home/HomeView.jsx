@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import  Draggable from 'react-draggable';
 
 import MapView from '../Utils/Map/MapView';
 import TableView from '../Utils/Table/TableView';
@@ -57,22 +58,24 @@ class Home extends React.Component {
                 <div id="map">
                     <MapView />
                 </div>
-                <div id="table-stuff">
-                    <button id="optimize-btn" 
-                        className={this.mapStore.locations.length < 5 ? "disabled" : ""}
-                        onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
-                    >
-                        OPTIMIZE
-                    </button> 
-                    <TableView
-                        className="text-shadow"
-                        title="Locations"
-                        head={["Number", "Name", "Location"]}
-                    >
-                        {this.renderSelectedLocations()}
-                        {this.renderOptimizedLocations()}
-                    </TableView>
-                </div>
+                <Draggable>
+                    <div id="table-stuff">
+                        <button id="optimize-btn" 
+                            className={this.mapStore.locations.length < 5 ? "disabled" : ""}
+                            onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
+                        >
+                            OPTIMIZE
+                        </button> 
+                        <TableView
+                            className="text-shadow"
+                            title="Locations"
+                            head={["Number", "Name", "Location"]}
+                        >
+                            {this.renderSelectedLocations()}
+                            {this.renderOptimizedLocations()}
+                        </TableView>
+                    </div>
+                </Draggable>
             </div>
 
         );
