@@ -18,6 +18,10 @@ class MapView extends React.Component {
         this.storeClickedLocation = this.storeClickedLocation.bind(this);
 
         this.mapRef = React.createRef();
+
+        this.map = null;
+        this.routingControl = null;
+        this.searchControl = null;
     }
 
     storeClickedLocation(e) {
@@ -60,9 +64,9 @@ class MapView extends React.Component {
     }
 
     componentDidMount(){
-        const map = this.mapRef.current.leafletElement;
-
-        const searchControl = new GeoSearchControl({
+        this.map = this.mapRef.current.leafletElement;
+        
+        this.searchControl = new GeoSearchControl({
             provider: new OpenStreetMapProvider(),
             style: 'button',
             autoClose:true,
@@ -71,21 +75,25 @@ class MapView extends React.Component {
             keepResult: false,
             autoCompleteDelay: 100,
             searchLabel: 'Enter',
-        }).addTo(map);
+        }).addTo(this.map);
 
-        map.on('geosearch/showlocation', (result) => {
+        this.routingControl = new L.Routing.control({
+            routeWhileDragging: false
+        }).addTo(this.map);    
+        
+        this.map.on('geosearch/showlocation', (result) => {
             this.storeSearchedLocation(result.location);
         })
     }
 
     showOptimizedPath(){ 
         if(this.mapStore.finishedOptimizing){
-            
-            const map = this.mapRef.current.leafletElement;
-            const routingControl = new L.Routing.control({
-                waypoints: this.mapStore.optimizedLocations,
-                routeWhileDragging: false,
-            }).addTo(map);
+            if(this.mapStore.optimizedLocations.length === 0){
+                this.routingControl.setWaypoints([]);
+                return;
+            }
+
+            this.routingControl.setWaypoints(this.mapStore.optimizedLocations);   
         }
     }
 

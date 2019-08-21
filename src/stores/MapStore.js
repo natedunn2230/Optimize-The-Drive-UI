@@ -19,6 +19,7 @@ class MapStore {
     clearLocations() {
         this.locations = [];
         this.optimizedLocations = [];
+        this.finishedOptimizing = false;
     }
 
     sendLocationsToOptimizer() {
