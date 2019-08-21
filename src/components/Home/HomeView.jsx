@@ -25,13 +25,16 @@ class Home extends React.Component {
     renderSelectedLocations() {
 
         const handleRemove = (index) => {
-            this.mapStore.removeLocation(index);
+            if(!this.mapStore.finishedOptimizing){
+                this.mapStore.removeLocation(index);
+            }
         }
         
         return (
             this.mapStore.locations.map((location, index) => {
                 return (
                     <RowView key={`row-${index}`}
+                        canRemove={true}
                         data={[`${index + 1}`, `${location.label}`, `${location.latlng.lat}, ${location.latlng.lng}`]}
                         onClick={() => {console.log("Showing row")}}
                         onRemove={() => {handleRemove(index)}}

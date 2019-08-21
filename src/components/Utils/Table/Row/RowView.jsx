@@ -16,7 +16,9 @@ export default class RowView extends React.Component {
         return(
             <tr>
                 {this.renderRowData()}
-                <td className="delete" onClick={this.props.onRemove}>X</td>
+                {this.props.canRemove && 
+                    <td className="delete" onClick={this.props.onRemove}>X</td>
+                }
             </tr>            
         );
     }

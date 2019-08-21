@@ -23,6 +23,9 @@ class MapStore {
     clearLocations() {
         this.locations = [];
         this.optimizedLocations = [];
+    }
+
+    resetOptimizer() {
         this.finishedOptimizing = false;
     }
 
@@ -98,7 +101,8 @@ decorate(MapStore, {
     optimizing: observable,
     addLocations: action,
     removeLocation: action,
-    sendLocationsToOptimizer: action
+    sendLocationsToOptimizer: action,
+    resetOptimizer: action
 });
 
 export default new MapStore();

@@ -90,9 +90,9 @@ class MapView extends React.Component {
         if(this.mapStore.finishedOptimizing){
             if(this.mapStore.optimizedLocations.length === 0){
                 this.routingControl.setWaypoints([]);
+                this.mapStore.resetOptimizer();
                 return;
             }
-
             this.routingControl.setWaypoints(this.mapStore.optimizedLocations);   
         }
     }

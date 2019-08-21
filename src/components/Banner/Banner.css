@@ -1,5 +1,5 @@
 #banner {
-    background-image: linear-gradient(#4A6FA5, #166088);
+    background-image: linear-gradient(to right, #4a6fa5, #00265f);
     text-align: center;
     height: auto;
     border: .1rem solid black;
@@ -10,7 +10,7 @@
 
 #banner-text {
     font-size: 3rem;
-    font: bold;
+    font: bolder;
     color: #ededed;
-    text-shadow: .15em .1rem .75rem  black;
+    text-shadow: .02em .1rem .1rem  black;
 }
