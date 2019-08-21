@@ -23,11 +23,18 @@ class Home extends React.Component {
 
     // adds the selected locations to the table
     renderSelectedLocations() {
+
+        const handleRemove = (index) => {
+            this.mapStore.removeLocation(index);
+        }
+        
         return (
             this.mapStore.locations.map((location, index) => {
                 return (
                     <RowView key={`row-${index}`}
                         data={[`${index + 1}`, `${location.label}`, `${location.latlng.lat}, ${location.latlng.lng}`]}
+                        onClick={() => {console.log("Showing row")}}
+                        onRemove={() => {handleRemove(index)}}
                     />
                 );
             })

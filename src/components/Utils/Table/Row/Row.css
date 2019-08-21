@@ -1,0 +1,8 @@
+.delete {
+    background-image: linear-gradient(to right, #c60303, red) !important;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.25rem;
+    cursor: pointer;
+}

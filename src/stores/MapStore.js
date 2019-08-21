@@ -16,6 +16,10 @@ class MapStore {
         this.locations.push(location);
     }
 
+    removeLocation(index) {
+        this.locations.splice(index, 1);
+    }
+
     clearLocations() {
         this.locations = [];
         this.optimizedLocations = [];
@@ -93,6 +97,7 @@ decorate(MapStore, {
     finishedOptimizing: observable,
     optimizing: observable,
     addLocations: action,
+    removeLocation: action,
     sendLocationsToOptimizer: action
 });
 
