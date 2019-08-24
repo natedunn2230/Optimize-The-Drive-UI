@@ -28,7 +28,7 @@ class MapView extends React.Component {
 
         // only want to store clicked locations before the optimization process
         // has begun and has no results
-        if(this.mapStore.optimizedLocations.length == 0){
+        if(this.mapStore.optimizedLocations.length === 0){
             let location = {};
 
             location.latlng = e.latlng;
@@ -43,7 +43,7 @@ class MapView extends React.Component {
 
         // only want to store searched locations before the optimization process
         // has begun and has no results
-        if(this.mapStore.optimizedLocations.length == 0){
+        if(this.mapStore.optimizedLocations.length === 0){
             let location = {};
 
             location.latlng = new L.LatLng(loc.y, loc.x);
@@ -93,7 +93,13 @@ class MapView extends React.Component {
                 this.mapStore.resetOptimizer();
                 return;
             }
-            this.routingControl.setWaypoints(this.mapStore.optimizedLocations);   
+
+            let waypoints = [];
+            this.mapStore.optimizedLocations.forEach((location, i) => {
+                waypoints.push(location.latlng);
+            });
+            
+            this.routingControl.setWaypoints(waypoints);   
         }
     }
 

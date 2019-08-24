@@ -1,4 +1,4 @@
-import { observable, action, computed, decorate } from 'mobx';
+import { observable, action, decorate } from 'mobx';
 import L from 'leaflet';
 import axios from 'axios';
 
@@ -10,6 +10,8 @@ class MapStore {
 
     locations = []; // array of objects {latlng: "", label: ""}
     optimizedLocations = []; // array of latLng
+    addressMapping = []; // will be used to map the returned lat, lng from
+    // the optimizer to their original address for display
 
     finishedOptimizing = false;
     optimizing = false;
@@ -56,12 +58,10 @@ class MapStore {
         let unoptimizedLocations = [];
 
         this.locations.forEach((location, i) => {
-            if(location.label !== "N/A")
-                unoptimizedLocations.push(location.label);
-            else
-                unoptimizedLocations.push(`${location.latlng.lat}, ${location.latlng.lng}`)
+            unoptimizedLocations.push(`${location.latlng.lat}, ${location.latlng.lng}`)
         });
 
+        this.addressMapping = this.locations;
         this.locations = [];
 
         // post the unoptimized locations to the server
@@ -98,13 +98,25 @@ class MapStore {
 
                     let lat = parseFloat(tokens[0]);
                     let lng = parseFloat(tokens[1]);
+                    let label = "";
+                    
+                    // find the original address to each lat, lng   
+                    for(let i = 0; i < this.addressMapping.length; i++){
+                        if(Math.abs(lat - this.addressMapping[i].latlng.lat) < 0.000000001 && 
+                            Math.abs(lng - this.addressMapping[i].latlng.lng) < 0.000000001){
+                            label = this.addressMapping[i].label;
+                            this.addressMapping.splice(i, 1);
+                            break;
+                        }
+                    }
 
-                    this.optimizedLocations.push(new L.latLng(lat, lng));
+                    this.optimizedLocations.push({'latlng': new L.latLng(lat, lng), 'label': label});
                 });
 
                 // adding first location as last location to create a circular path
                 this.optimizedLocations.push(this.optimizedLocations[0]);
-
+                
+                this.addressMapping = [];
                 this.finishedOptimizing = true;
                 this.optimizing = false;
             }

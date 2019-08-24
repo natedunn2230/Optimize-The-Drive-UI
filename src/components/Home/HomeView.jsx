@@ -49,10 +49,11 @@ class Home extends React.Component {
         if(this.mapStore.finishedOptimizing){ 
             return (
                 this.mapStore.optimizedLocations.map((location, index) => {
-                    if(index != this.mapStore.optimizedLocations.length - 1){
+                    if(index !== this.mapStore.optimizedLocations.length - 1){
                         return (
                             <RowView key={`row-${index}`}
-                                data={[`${index + 1}`, `${"N/A"}`, `${location.lat}, ${location.lng}`]}
+                                data={[`${index + 1}`, `${location.label}`, 
+                                `${location.latlng.lat}, ${location.latlng.lng}`]}
                             />
                         );
                     }
