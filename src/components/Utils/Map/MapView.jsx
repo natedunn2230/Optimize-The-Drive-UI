@@ -32,7 +32,7 @@ class MapView extends React.Component {
             let location = {};
 
             location.latlng = e.latlng;
-            location.label = "N/A";
+            location.label = "";
     
             this.mapStore.addLocation(location);
         

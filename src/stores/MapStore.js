@@ -5,6 +5,8 @@ import axios from 'axios';
 class MapStore {
 
     optimizerUrl = 'http://optimize-the-drive-api.herokuapp.com';
+    reverseGeocodeUrl = 'https://us1.locationiq.com/v1/reverse.php';
+    reverseGeocodeKey = '1f0850a1840cf9';
 
     locations = []; // array of objects {latlng: "", label: ""}
     optimizedLocations = []; // array of latLng
@@ -13,7 +15,24 @@ class MapStore {
     optimizing = false;
 
     addLocation(location) {
-        this.locations.push(location);
+
+        // label is not empty, so it was a searched location
+        if(location.label !== ""){
+            this.locations.push(location);
+            return;
+        }
+
+        // label is empty, so it was a clicked location.
+        // Let's utilize reverse geocode lookup to get an address on the coordinates
+        axios.get(`${this.reverseGeocodeUrl}?key=${this.reverseGeocodeKey}&
+        lat=${location.latlng.lat}&lon=${location.latlng.lng}&format=json`)
+        .then((res) => {
+            location.label = res.data.display_name;
+            this.locations.push(location);
+        })
+        .catch((err) => {
+            console.log("Unable to reverse geocode");
+        })
     }
 
     removeLocation(index) {
