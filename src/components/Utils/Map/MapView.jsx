@@ -35,7 +35,7 @@ class MapView extends React.Component {
             location.label = "";
     
             this.mapStore.addLocation(location);
-        
+            this.mapStore.clearHighlightedLocation();
         }
     }
 
@@ -50,14 +50,36 @@ class MapView extends React.Component {
             location.label = loc.label;
             
             this.mapStore.addLocation(location);
+            this.mapStore.clearHighlightedLocation();
         }
     }
 
     renderMarker() {
+
+        const openPopup = (marker) => {
+            if (marker) {
+                marker.leafletElement.openPopup();
+
+                setTimeout(() => {
+                    marker.leafletElement.closePopup();
+                }, 3000);
+            }
+        }
+
         return this.mapStore.locations.map((location, index) => {
+            if(location !== this.mapStore.highlightedLocation){
+                return (
+                    <Marker key={`marker-${index}`} position={location.latlng}
+                        opacity={0.5}>
+                        <Popup>{`${index + 1}: ${location.label}`}</Popup>
+                    </Marker>
+                )
+            }
+
             return (
-                <Marker key={`marker-${index}`} position={location.latlng}>
-                    <Popup>{`${location.latlng.lat},${location.latlng.lng}`}</Popup>
+                <Marker key={`marker-${index}`} ref={openPopup} position={location.latlng}
+                    opacity={1}>
+                        <Popup>{`${index + 1}: ${location.label}`}</Popup>
                 </Marker>
             )
         })

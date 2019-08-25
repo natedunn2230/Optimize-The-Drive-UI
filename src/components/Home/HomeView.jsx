@@ -29,14 +29,14 @@ class Home extends React.Component {
                 this.mapStore.removeLocation(index);
             }
         }
-        
+
         return (
             this.mapStore.locations.map((location, index) => {
                 return (
                     <RowView key={`row-${index}`}
                         canRemove={true}
                         data={[`${index + 1}`, `${location.label}`, `${location.latlng.lat}, ${location.latlng.lng}`]}
-                        onClick={() => {console.log("Showing row")}}
+                        onClick={() => { this.mapStore.setHighlightedLocation(index, false) }}
                         onRemove={() => {handleRemove(index)}}
                     />
                 );
@@ -46,6 +46,11 @@ class Home extends React.Component {
 
     // adds optimized locations in the order they should be visited to the table
     renderOptimizedLocations()  {
+
+        const handleOptimizeHighlight = (index) => {
+            this.mapStore.setHighlightedLocation(index, true);
+        }
+
         if(this.mapStore.finishedOptimizing){ 
             return (
                 this.mapStore.optimizedLocations.map((location, index) => {
@@ -54,6 +59,7 @@ class Home extends React.Component {
                             <RowView key={`row-${index}`}
                                 data={[`${index + 1}`, `${location.label}`, 
                                 `${location.latlng.lat}, ${location.latlng.lng}`]}
+                                onClick={() => {handleOptimizeHighlight(index) }}
                             />
                         );
                     }

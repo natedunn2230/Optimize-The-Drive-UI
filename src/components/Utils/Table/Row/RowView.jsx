@@ -7,7 +7,9 @@ export default class RowView extends React.Component {
     renderRowData(){
         return this.props.data.map((item, index) => {
             return(
-                <td key={`row-${index}`} onClick={this.props.onClick}>{item}</td>
+                <td key={`row-${index}`} 
+                    onClick={this.props.onClick}
+                    >{item}</td>
             );
         });
     }

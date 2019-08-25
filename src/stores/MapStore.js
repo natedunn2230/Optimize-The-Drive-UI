@@ -8,6 +8,7 @@ class MapStore {
     reverseGeocodeUrl = 'https://us1.locationiq.com/v1/reverse.php';
     reverseGeocodeKey = '1f0850a1840cf9';
 
+    highlightedLocation = null;
     locations = []; // array of objects {latlng: "", label: ""}
     optimizedLocations = []; // array of latLng
     addressMapping = []; // will be used to map the returned lat, lng from
@@ -38,7 +39,9 @@ class MapStore {
     }
 
     removeLocation(index) {
-        this.locations.splice(index, 1);
+        let removedItem = this.locations.splice(index, 1);
+        if(removedItem === this.highlightedLocation)
+            this.highlightedLocation = null;
     }
 
     clearLocations() {
@@ -48,6 +51,15 @@ class MapStore {
 
     resetOptimizer() {
         this.finishedOptimizing = false;
+        this.highlightedLocation = null;
+    }
+
+    setHighlightedLocation(index, optimized) {
+        this.highlightedLocation = optimized ? this.optimizedLocations[index] : this.locations[index];
+    }
+
+    clearHighlightedLocation() {
+        this.highlightedLocation = null;
     }
 
     sendLocationsToOptimizer() {
@@ -126,10 +138,13 @@ class MapStore {
 }
 
 decorate(MapStore, {
+    highlightedLocation: observable,
     locations: observable,
     optimizedLocations: observable,
     finishedOptimizing: observable,
     optimizing: observable,
+    setHighlightedLocation: action,
+    clearHighlightedLocation: action,
     addLocations: action,
     removeLocation: action,
     sendLocationsToOptimizer: action,
