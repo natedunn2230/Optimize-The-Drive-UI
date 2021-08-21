@@ -4,9 +4,9 @@ import axios from 'axios';
 
 class MapStore {
 
-    optimizerUrl = 'http://optimize-the-drive-api.herokuapp.com';
-    reverseGeocodeUrl = 'https://us1.locationiq.com/v1/reverse.php';
-    reverseGeocodeKey = '1f0850a1840cf9';
+    optimizerUrl = process.env.REACT_APP_OTD_API;
+    reverseGeocodeUrl = process.env.REACT_APP_GEOCODE_API;
+    reverseGeocodeKey = process.env.REACT_APP_GEOCODE_KEY;
 
     highlightedLocation = null;
     locations = []; // array of objects {latlng: "", label: ""}
@@ -70,7 +70,7 @@ class MapStore {
         let unoptimizedLocations = [];
 
         this.locations.forEach((location, i) => {
-            unoptimizedLocations.push(`${location.latlng.lat}, ${location.latlng.lng}`)
+            unoptimizedLocations.push(`${location.latlng.lat},${location.latlng.lng}`)
         });
 
         this.addressMapping = this.locations;
@@ -101,7 +101,10 @@ class MapStore {
             if(res.data.status === 'in-progress'){
                 setTimeout(()=> {this.pollResult(resultID)}, 5000);
 
-            } else {
+            } else if(res.data.status === 'failed') {
+                this.optimizing = false;
+                alert('Could not optimize your route');
+            }else {
                 let result = res.data.data; // ['1.2, 2.1' , '3.2, 1.2']
 
                 // parse result into correct latLng object
