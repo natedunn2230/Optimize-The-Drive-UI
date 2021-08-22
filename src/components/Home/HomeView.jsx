@@ -84,8 +84,8 @@ class Home extends React.Component {
                 </div>
                 <div id="table-stuff">
                     <button id="optimize-btn" 
-                        className={this.mapStore.locations.length < 5 ? "disabled" : ""}
-                        onClick={this.mapStore.locations.length < 5 ? () => {} : this.optimizeRoutes}
+                        className={this.mapStore.locations.length < 2 ? "disabled" : ""}
+                        onClick={this.mapStore.locations.length < 2 ? () => {} : this.optimizeRoutes}
                     >
                         OPTIMIZE
                     </button>
