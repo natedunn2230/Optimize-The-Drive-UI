@@ -1,0 +1,136 @@
+.homepage-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:space-between;
+    height: 100vh;
+    background-image: url('../../resources/homepage_background.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.text-image-container {
+    text-align: center;
+    background: rgba(0,0,0, 0.35);
+    padding: 1.5rem 0;
+    width: 100%;
+}
+
+.homepage-container > * h1 {
+    margin: 0px;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.homepage-container > * p {
+    margin: 0.5rem;
+    color: white;
+}
+
+.car-image {
+    width: 10rem;
+}
+
+.button-input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.input-container > input {
+    width: 20rem;
+    height: 2em;
+    user-select: none;
+    outline: none;
+    margin-top: 0.5rem;
+    border-radius: 3px;
+    border: none;
+    padding: 5px;
+    -webkit-user-select: text;
+}
+
+.button-input-container > * label {
+    color: white;
+}
+
+.start-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    width: 20rem;
+    height: 3rem;
+    font-weight: 800;
+    font-size: 0.8rem;
+    background-color: #7b9c7c;
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
+
+.start-button:hover {
+    cursor: pointer;
+    background-color: #718d72;
+}
+
+.start-button-disabled {
+    background-color: #9ea09e !important;
+    cursor: not-allowed !important;
+}
+
+footer {
+    width: 100%;
+    background-color: rgba(0,0,0,0.4);
+    text-align: right;
+    margin: 0 1rem;
+}
+
+footer > * a {
+    text-decoration: none;
+    color: #8eb48f;
+}
+
+@media only screen and (max-height: 450px) {
+    .homepage-container {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        flex-direction: row;
+    }
+
+    .text-image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: center;
+        padding: 0 1rem;
+        max-width: 15rem;
+    }
+
+    .input-container > input {
+        width: 15rem;
+    }
+
+    .start-button {
+        width: 15rem;
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        width: fit-content;
+        background-color: rgba(0,0,0,0);
+        margin-left: 2rem;
+    }
+    
+}

@@ -1,0 +1,130 @@
+.ReactCollapse--collapse {
+    transition: height 500ms;
+    width: 100%;
+}
+
+.map-page {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.bottom-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    width: 100%;
+    background: transparent;
+}
+
+.panel-actions {
+    display: flex;
+}
+
+.panel-btn {
+    width: 2rem;
+    padding: 0.2rem;
+}
+
+.panel-btn:hover {
+    cursor: pointer;
+}
+
+.panel-btn-disabled {
+    background-color: #9ea09e !important;
+    cursor: not-allowed;
+}
+
+.btn-expand {
+    background-color: #444;
+    border-bottom: none;
+    padding: 0 1rem;
+    color: white;
+    font-weight: bold;
+}
+
+.location-controls {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: #444;
+    padding: 0.5rem;
+}
+
+.table-container {
+    height: 20rem;
+    overflow-y: auto;
+    margin: 1rem 1.5rem;
+    border: 0px solid #7b9c7c;
+    border-radius: 5px;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+}
+
+.map-btn {
+    width: 18rem;
+    height: 3rem;
+    font-weight: 800;
+    font-size: 0.8rem;
+    color: white;
+    border-radius: 3px;
+    border: none;
+    margin: 0.5rem;
+    user-select: none;
+}
+
+.map-btn:hover {
+    cursor: pointer;
+}
+
+.map-btn:disabled {
+    background-color: #9ea09e !important;
+    cursor: not-allowed;
+}
+
+.btn-optimize {
+    background-color: #7b9c7c;
+}
+
+.btn-optimize:hover {
+    background-color: #718d72;;
+}
+
+.btn-restart {
+    background-color: #9c7b7b;
+}
+
+.btn-restart:hover {
+    background-color: #8b6d6d;
+}
+
+.loading-contents {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top:50%;
+    transform: translate(-50%);
+}
+
+@media only screen and (max-width: 650px) {
+    .map-btn {
+        width: 10rem;
+    }
+}
+
+@media only screen and (max-height: 400px) {
+    .table-container {
+        height:8rem;
+        margin: 0.5rem 1rem;
+    }
+}

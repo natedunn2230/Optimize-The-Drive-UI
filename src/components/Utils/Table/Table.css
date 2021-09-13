@@ -1,42 +1,53 @@
-#table {
-    border-collapse: collapse;
-    width: 100%;
-    font-size: 1rem;
+.table {
+    background-color: white;
+    height: 100%;
 }
 
-#scroll {
-    overflow: scroll;
-    overflow-x: hidden;
-    width: 100%;
-    height:10rem;
-    background: rgba(22, 96, 136, 0.4);
-    border: .1rem solid black;
-    box-shadow: .2rem .2rem 2rem #166088;
-}
-
-#table td, th {
-    padding: .5rem;
-    border: .1rem solid black;
-}
-
-#table tr {
-    background-color: rgba(255,255,255, 0.6);
-    border: .1rem solid black;
-}
-
-#table tr:nth-child(even){
-    background-color: rgba(180, 180, 180, 0.8)
-}
-
-#table tr:hover{
-    background-color: rgba(90, 90, 90, .6);
-}
-
-#table th {
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    
-    background-color: rgba(0, 0, 0, 0.8);
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     color: white;
-    border: none;
+}
+
+.table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table tr:hover td {
+    background-color: #ededed;
+    cursor: pointer;
+}
+
+.table th, td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #aaa;
+}
+
+.table th {
+    background-color: #7b9c7c;
+}
+
+.table td {
+    background-color: white;
+    text-align: center;
+}
+
+.selected {
+    background-color: #ededed !important;
+}
+
+.delete {
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.delete img {
+    opacity: 0.8;
+}
+
+.delete img:hover {
+    opacity: 1;
 }
