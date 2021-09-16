@@ -40,7 +40,7 @@ export const TableRow = props => {
                 <td
                     key={`row-${index}`} 
                     onClick={props.onClick}
-                    className={props.selected ? "selected" : ""}
+                    className={`${props.selected ? "selected" : ""} ${props.className || ""}`}
                 >
                     {item}
                 </td>

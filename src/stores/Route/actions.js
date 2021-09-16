@@ -120,7 +120,15 @@ const pollResult = resultId => async (dispatch, getState) => {
     });
 };
 
-export const addLocationToRoute = location => async (dispatch, __getState) => {
+export const addLocationToRoute = location => async (dispatch, getState) => {
+    const {route} = getState();
+    const {locations} = route;
+    // temporary cap at 5 locations
+    if(locations.length + 1 > 5) {
+        alert('Location count is capped at 5 for demo purposes');
+        return;
+    }
+
     // label is not empty, so it was a searched location
     if(location.label !== ""){
         dispatch(addLocation(location));

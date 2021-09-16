@@ -61,9 +61,13 @@ const MapPage = () => {
 
         if(locations.length === 0 && optimizedLocations.length === 0) {
             return (
-                <TableRow key="empty" data={["", "No Locations Selected", ""]}/>
+                <TableRow className="no-bottom-border" key="empty" data={["", "No Locations Selected", ""]}/>
             );
         };
+
+        if(optimizing) {
+            return<TableRow className="no-bottom-border" key="empty" data={["", <LoadingSpinner text="Optimizing" color="#7b9c7c;"/>, ""]} /> ;
+        }
 
         if(finishedOptimizing){ 
             return optimizedLocations.map((location, index) => {
@@ -73,7 +77,7 @@ const MapPage = () => {
                         <TableRow
                             selected={isSelected}
                             key={`row-${index}`}
-                            data={[`${index + 1}`, `${location.label},`, ""]}
+                            data={[String.fromCharCode(97 + index).toUpperCase(), `${location.label},`, ""]}
                             onClick={() => handleLocationClick(index)}
                         />
                     );
@@ -109,6 +113,7 @@ const MapPage = () => {
 
         location.latlng = e.latlng;
         location.label = "";
+
         dispatch(addLocationToRoute(location));
     };
 
@@ -175,9 +180,7 @@ const MapPage = () => {
                 />
                 {!finishedOptimizing && renderMapMarkers()}
             </Map>
-            <div className="spinner-container">
-                {optimizing && !tableOpen && <LoadingSpinner className="spinner" text="Optimizing" color="#ffffff" vertical/>}
-            </div>
+            {optimizing && <LoadingSpinner className="spinner" text="Optimizing" color="#ffffff" vertical/>}
             <div className="bottom-panel">
                 <div className="panel-actions">
                     {!tableOpen &&
