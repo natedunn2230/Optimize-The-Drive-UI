@@ -1,0 +1,18 @@
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner p {
+    margin-left: 0.5rem;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+.vertical p {
+    margin-top: 0.5rem;
+    margin-left: 0;
+}

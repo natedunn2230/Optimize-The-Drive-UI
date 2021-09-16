@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { useDebounce } from "use-debounce";
-import { addressLookup } from "../../requests";
 import "./HomePage.css";
+
+import { addressLookup } from "../../requests";
+import { addLocationToRoute, resetOptimization } from "../../stores/Route/actions";
 import carImage from "../../resources/car.svg";
 import LoadingSpinner from "../Utils/LoadingSpinner";
-import { addLocationToRoute, resetOptimization } from "../../stores/Route/actions";
 
 const HomePage = () => {
 
@@ -15,7 +16,7 @@ const HomePage = () => {
     const [locationOptions, setLocationOptions] = useState([]);
     const [searching, setSearching] = useState(false);
 
-    const noStart = routeStart === ''  || searching || locationOptions.length === 0;
+    const noStart = routeStart === ""  || searching || locationOptions.length === 0;
 
     // hooks
     const history = useHistory();
@@ -23,7 +24,7 @@ const HomePage = () => {
 
     useEffect(() => {
         dispatch(resetOptimization());
-    },[]);
+    },[dispatch]);
 
     useEffect(() => {
         if(routeStart) {
@@ -37,7 +38,7 @@ const HomePage = () => {
         } else {
             setLocationOptions([]);
         }
-    }, [debouncedRouteStart]);
+    }, [debouncedRouteStart, routeStart]);
 
 
     // handler functions
@@ -59,7 +60,7 @@ const HomePage = () => {
     return (
         <div className="homepage-container">
             <div className="text-image-container">
-                <img src={carImage} className="car-image"/>
+                <img src={carImage} className="car-image" alt="car icon"/>
                 <h1>Optimize The Drive</h1>
                 <p>A tool to help you determine the best route for your journeys.</p>
             </div>

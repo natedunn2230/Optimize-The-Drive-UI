@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import './Table.css';
+import "./Table.css";
 import Delete from "../../../resources/delete_black.svg";
 
 export const Table = props => {
 
     const generateHead = () => {
-
         return props.head.map((val, index) => {
             return(
                 <th key={`header-${index}`}>
@@ -14,10 +13,10 @@ export const Table = props => {
                 </th>
             );
         });
-    }
+    };
 
     return(
-        <div className={'table'}>   
+        <div className={"table"}>   
             <table>
                 <thead>
                     <tr>
@@ -31,7 +30,7 @@ export const Table = props => {
             </table> 
         </div>
     );
-}
+};
 
 export const TableRow = props => {
 
@@ -41,20 +40,20 @@ export const TableRow = props => {
                 <td
                     key={`row-${index}`} 
                     onClick={props.onClick}
-                    className={props.selected ? 'selected' : ''}
+                    className={props.selected ? "selected" : ""}
                 >
                     {item}
                 </td>
             );
         });
-    }
+    };
 
     return(
         <tr>
             {renderRowData()}
             {props.canRemove && 
-                <td className={'delete ' + (props.selected ? 'selected' : '')} onClick={props.onRemove}>
-                    <img src={Delete}/>
+                <td className={"delete " + (props.selected ? "selected" : "")} onClick={props.onRemove}>
+                    <img src={Delete} alt="delete icon"/>
                 </td>
             }
         </tr>

@@ -25,6 +25,7 @@
 
 .panel-actions {
     display: flex;
+    justify-content: center;
 }
 
 .panel-btn {
@@ -108,12 +109,21 @@
     background-color: #8b6d6d;
 }
 
-.loading-contents {
+.spinner-container {
     position: absolute;
     z-index: 1;
     left: 50%;
     top:50%;
-    transform: translate(-50%);
+    width: 100%;
+    transform: translate(-50%, -50%);
+}
+
+.spinner {
+    background: #1a251a9c;
+    width: 100%;
+    height: 100vh;
+    color: white;
+    font-weight: bold;
 }
 
 @media only screen and (max-width: 650px) {
