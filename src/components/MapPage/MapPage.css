@@ -39,7 +39,7 @@
 
 .panel-btn-disabled {
     background-color: #9ea09e !important;
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 }
 
 .btn-expand {

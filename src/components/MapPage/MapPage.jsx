@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Marker, Popup} from "react-leaflet";
 import Collapse from "react-collapse";
+import ReactTooltip from "react-tooltip";
 import L from "leaflet";
 
 import Map, { MapActions, MapSearch, RouteControl } from "../Utils/Map/Map";
@@ -101,11 +102,11 @@ const MapPage = () => {
     };
 
     const optimizeRoutes = () => {
-        if(locations.length > 1 && !optimizing) dispatch(startOptimization());
+        if(!disableOptimize) dispatch(startOptimization());
     };
 
     const clearRoutes = () => {
-        if(window.confirm("Restarting results in lost changes") && locations.length > 0 && !optimizing) dispatch(restartRoute());
+        if(!disableRestart && window.confirm("Restarting results in lost changes") && locations.length > 0 && !optimizing) dispatch(restartRoute());
     };
 
     const storeClickedLocation = e => {
@@ -152,7 +153,12 @@ const MapPage = () => {
                 >
                     <Popup >
                         {`${index + 1}: ${location.label}`}
-                        <img className="marker-delete-btn" src={Delete} onClick={() => handleRemoveLocation(index)} alt="delete icon" />
+                        <img
+                            className="marker-delete-btn"
+                            src={Delete}
+                            onClick={() => handleRemoveLocation(index)}
+                            alt="delete icon"
+                        />
                     </Popup>
                 </Marker>
             );
@@ -185,13 +191,14 @@ const MapPage = () => {
                 <div className="panel-actions">
                     {!tableOpen &&
                         <img
+                            data-tip="Restart"
+                            data-for="restart-tooltip"
                             alt="restart icon"
                             className={`btn-restart panel-btn ${disableRestart ? "panel-btn-disabled" : ""}`}
                             src={Restart}
                             onClick={clearRoutes}
                         />
                     }
-
                     <img
                         alt="panel control icon"
                         src={tableOpen ? ExpandMore : ExpandLess}
@@ -200,6 +207,8 @@ const MapPage = () => {
                     />
                     {!tableOpen &&
                         <img
+                            data-tip="Optimize"
+                            data-for="optimize-tooltip"
                             alt="optimize icon"
                             className={`btn-optimize panel-btn ${disableOptimize ? "panel-btn-disabled" : ""}`}
                             src={Optimize}
@@ -244,6 +253,8 @@ const MapPage = () => {
                     </Collapse>
                 </div>
             </div>
+            <ReactTooltip id="restart-tooltip"/>
+            <ReactTooltip id="optimize-tooltip"/>
         </div>
     );
 };
