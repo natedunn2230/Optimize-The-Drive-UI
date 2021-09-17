@@ -34,7 +34,6 @@ const HomePage = () => {
         }).finally(() => setSearching(false));
     }, [debouncedRouteStart]);
 
-
     // handler functions
     const onProcedeClick = (event) => {
         event.preventDefault();
