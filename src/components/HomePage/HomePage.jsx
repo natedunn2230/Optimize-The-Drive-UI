@@ -25,18 +25,14 @@ const HomePage = () => {
     },[dispatch]);
 
     useEffect(() => {
-        if(routeStart) {
-            setSearching(true);
-            addressLookup(debouncedRouteStart).then(locations => {
-                setLocationOptions(locations);
-            }).catch(error => {
-                console.error("Locations not found", error);
-                setLocationOptions([]);
-            }).finally(() => setSearching(false));
-        } else {
+        setSearching(true);
+        addressLookup(debouncedRouteStart).then(locations => {
+            setLocationOptions(locations);
+        }).catch(error => {
+            console.error("Locations not found", error);
             setLocationOptions([]);
-        }
-    }, [debouncedRouteStart, routeStart]);
+        }).finally(() => setSearching(false));
+    }, [debouncedRouteStart]);
 
 
     // handler functions
