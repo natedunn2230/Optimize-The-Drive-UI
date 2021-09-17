@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Marker, Popup} from "react-leaflet";
 import Collapse from "react-collapse";
 import ReactTooltip from "react-tooltip";
 import L from "leaflet";
 
-import Map, { MapActions, MapSearch, RouteControl } from "../Utils/Map/Map";
+import Map, { MapActions, MapSearch, RouteControl, MapMarker } from "../Utils/Map/Map";
 import {Table, TableRow} from "../Utils/Table/Table";
 import LoadingSpinner from "../Utils/LoadingSpinner";
 
@@ -19,12 +18,10 @@ import {
 
 import "./MapPage.css";
 
-import MarkerIcon from "../../resources/custom-icon.png";
 import ExpandMore from "../../resources/expand_more.svg";
 import ExpandLess from "../../resources/expand_less.svg";
 import Restart from "../../resources/restart_white.svg";
 import Optimize from "../../resources/start_white.svg";
-import Delete from "../../resources/delete_black.svg";
 
 const MapPage = () => {
     const [routeControlWaypoints, setRouteWaypoints] = useState([]);
@@ -41,10 +38,6 @@ const MapPage = () => {
 
     const mapCenter = [locations[0] ? locations[0].latlng.lat : 40, locations[0] ? locations[0].latlng.lng : -95];
     const zoomLevel = (locations && locations[0]) ? 11 : 4;
-    const markerIcon = L.icon({
-        iconUrl: MarkerIcon,
-        iconSize: [32, 45]
-    });
 
     const disableRestart = locations.length < 1 || optimizing;
     const disableOptimize = locations.length < 2 || optimizing;
@@ -54,12 +47,48 @@ const MapPage = () => {
         setRouteWaypoints(waypoints);
     }, [optimizedLocations]);
 
+    /** Handlers */
+    const handleLocationClick = idx => {
+        dispatch(highlightLocationInRoute(idx));
+    };
+
+    const handleMarkerClick = index => {
+        dispatch(highlightLocationInRoute(index));
+    };
+
+    const optimizeRoutes = () => {
+        if(!disableOptimize) dispatch(startOptimization());
+    };
+
+    const clearRoutes = () => {
+        if(!disableRestart && window.confirm("Restarting results in lost changes") && locations.length > 0 && !optimizing) dispatch(restartRoute());
+    };
+
+    const storeClickedLocation = e => {
+        let location = {};
+
+        location.latlng = e.latlng;
+        location.label = "";
+
+        dispatch(addLocationToRoute(location));
+    };
+
+    const storeSearchedLocation = loc => {
+        let location = {};
+
+        location.latlng = new L.LatLng(loc.y, loc.x);
+        location.label = loc.label;
+        
+        dispatch(addLocationToRoute(location));
+    };
+
+    const handleRemoveLocation = idx => {
+        dispatch(removeLocationFromRoute(idx));
+    };
+    //---------------------------
+
+    /** Render Functions */
     const renderTableRows = () => {
-
-        const handleLocationClick = idx => {
-            dispatch(highlightLocationInRoute(idx));
-        };
-
         if(locations.length === 0 && optimizedLocations.length === 0) {
             return (
                 <TableRow className="no-bottom-border" key="empty" data={["", "No Locations Selected", ""]}/>
@@ -101,69 +130,24 @@ const MapPage = () => {
         }
     };
 
-    const optimizeRoutes = () => {
-        if(!disableOptimize) dispatch(startOptimization());
-    };
-
-    const clearRoutes = () => {
-        if(!disableRestart && window.confirm("Restarting results in lost changes") && locations.length > 0 && !optimizing) dispatch(restartRoute());
-    };
-
-    const storeClickedLocation = e => {
-        let location = {};
-
-        location.latlng = e.latlng;
-        location.label = "";
-
-        dispatch(addLocationToRoute(location));
-    };
-
-    const storeSearchedLocation = loc => {
-        let location = {};
-
-        location.latlng = new L.LatLng(loc.y, loc.x);
-        location.label = loc.label;
-        
-        dispatch(addLocationToRoute(location));
-    };
-
-    const handleRemoveLocation = idx => {
-        dispatch(removeLocationFromRoute(idx));
-    };
-
     const renderMapMarkers = () => {
-        const handleMarkerClick = index => {
-            dispatch(highlightLocationInRoute(index));
-        };
-
         return locations.map((location, index) => {
 
             const isSelected = selectedLocation === index;
 
-            return (
-                <Marker
-                    icon={markerIcon}
+            return(
+                <MapMarker
                     key={`marker-${index}`}
-                    position={location.latlng}
+                    location={location}
                     opacity={(isSelected || selectedLocation === null) ? 1 : 0.4}
-                    draggable={false}
-                    eventHandlers={{
-                        click: () => handleMarkerClick(index),
-                    }}
-                >
-                    <Popup >
-                        {`${index + 1}: ${location.label}`}
-                        <img
-                            className="marker-delete-btn"
-                            src={Delete}
-                            onClick={() => handleRemoveLocation(index)}
-                            alt="delete icon"
-                        />
-                    </Popup>
-                </Marker>
+                    onClick={() => handleMarkerClick(index)}
+                    onRemove={() => handleRemoveLocation(index)}
+                    label={`${index + 1}: ${location.label}`}
+                />
             );
         });
     };
+    // -------------------------
 
     return (
         <div className={"map-page"}>
@@ -181,7 +165,6 @@ const MapPage = () => {
                 />
                 <RouteControl
                     waypoints={routeControlWaypoints}
-                    markerIcon={markerIcon}
                     lineColor="#ff3030"
                 />
                 {!finishedOptimizing && renderMapMarkers()}
@@ -258,6 +241,5 @@ const MapPage = () => {
         </div>
     );
 };
-
 
 export default MapPage;

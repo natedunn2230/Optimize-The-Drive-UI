@@ -15,10 +15,8 @@ const HomePage = () => {
     const [debouncedRouteStart] = useDebounce(routeStart, 1000);
     const [locationOptions, setLocationOptions] = useState([]);
     const [searching, setSearching] = useState(false);
-
     const noStart = routeStart === ""  || searching || locationOptions.length === 0;
 
-    // hooks
     const history = useHistory();
     const dispatch = useDispatch();
 
@@ -77,7 +75,6 @@ const HomePage = () => {
                         id="start-location"
                         list="location-names"
                         onChange={handleLocationOnChange}
-                        onInput={(e) => console.log(e.target.value)}
                         value={routeStart}
                     />
                     <datalist
@@ -86,7 +83,6 @@ const HomePage = () => {
                         {locationOptions.map(location => (
                             <option
                                 key={location.place_id}
-                                onSelect={e => console.log(e.target.value)}
                             >
                                 {location.display_name}
                             </option>

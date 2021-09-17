@@ -1,12 +1,22 @@
 import React, { useEffect } from "react";
 import L from "leaflet";
-import { MapContainer, TileLayer, useMapEvents, useMap } from "react-leaflet";
+import { 
+    MapContainer, TileLayer,
+    useMapEvents, useMap, Marker, Popup
+} from "react-leaflet";
 import { GeoSearchControl, OpenStreetMapProvider } from "leaflet-geosearch";
 import "leaflet-routing-machine";
 
 import "./Map.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 
+import Delete from "../../../resources/delete_black.svg";
+import MarkerIcon from "../../../resources/custom-icon.png";
+
+const markerIcon = L.icon({
+    iconUrl: MarkerIcon,
+    iconSize: [32, 45]
+});
 
 const Map = props => {
 
@@ -61,7 +71,6 @@ export const MapSearch = props => {
 };
 
 export const RouteControl = props => {
-
     const map = useMap();
 
     const routeControl = L.Routing.control({
@@ -75,7 +84,7 @@ export const RouteControl = props => {
         showAlternatives: false,
         createMarker: function(i, waypoint, __n) {
             const marker = L.marker(waypoint.latLng, {
-                icon: props.markerIcon
+                icon: markerIcon
             });
             return marker;
         }
@@ -90,5 +99,29 @@ export const RouteControl = props => {
     return null;
 };
 
+export const MapMarker = props => {
+    return (
+        <Marker
+            id={props.id}
+            icon={markerIcon}
+            position={props.location.latlng}
+            opacity={props.opacity}
+            draggable={false}
+            eventHandlers={{
+                click: props.onClick
+            }}
+        >
+            <Popup >
+                {props.label}
+                <img
+                    className="marker-delete-btn"
+                    src={Delete}
+                    onClick={props.onRemove}
+                    alt="delete icon"
+                />
+            </Popup>
+        </Marker>
+    );
+};
 
 export default Map;
