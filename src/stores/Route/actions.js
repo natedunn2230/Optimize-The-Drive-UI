@@ -1,7 +1,7 @@
 import {
     postUnoptimizedLocations,
     pollOptimizedLocationsResult,
-    reverseAddressLookup
+    getLocationByCoord
 } from "../../requests";
 import L from 'leaflet';
 
@@ -136,8 +136,8 @@ export const addLocationToRoute = location => async (dispatch, getState) => {
     }
 
     // find address based on coordinates
-    reverseAddressLookup(location.latlng.lat, location.latlng.lng).then(name => {
-        location.label = name;
+    getLocationByCoord(location.latlng.lat, location.latlng.lng).then(loc => {
+        location.label = loc.name;
         dispatch(addLocation(location));
     }).catch(error => {
         console.error("Unable to reverse coordinates", error);

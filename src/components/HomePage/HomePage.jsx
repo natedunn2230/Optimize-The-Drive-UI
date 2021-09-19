@@ -4,7 +4,7 @@ import { useHistory } from "react-router";
 import { useDebounce } from "use-debounce";
 import "./HomePage.css";
 
-import { addressLookup } from "../../requests";
+import { getLocationsByAddress } from "../../requests";
 import { addLocationToRoute, resetOptimization } from "../../stores/Route/actions";
 import carImage from "../../resources/car.svg";
 import LoadingSpinner from "../Utils/LoadingSpinner";
@@ -26,7 +26,7 @@ const HomePage = () => {
 
     useEffect(() => {
         setSearching(true);
-        addressLookup(debouncedRouteStart).then(locations => {
+        getLocationsByAddress(debouncedRouteStart, 5).then(locations => {
             setLocationOptions(locations);
         }).catch(error => {
             console.error("Locations not found", error);
@@ -37,9 +37,9 @@ const HomePage = () => {
     // handler functions
     const onProcedeClick = (event) => {
         event.preventDefault();
-        addressLookup(routeStart).then(locations => {
-            const { lat, lon, display_name } = locations[0]; 
-            dispatch(addLocationToRoute({label: display_name, latlng: {lat: lat, lng: lon}}));
+        getLocationsByAddress(routeStart, 1).then(locations => {
+            const { lat, lng, name } = locations[0]; 
+            dispatch(addLocationToRoute({label: name, latlng: {lat: lat, lng: lng}}));
             history.push("/map");
         }).catch(error => {
             console.error("Unable to find location", error);
@@ -79,7 +79,7 @@ const HomePage = () => {
                             <option
                                 key={location.place_id}
                             >
-                                {location.display_name}
+                                {location.name}
                             </option>
                         ))}
                         {locationOptions.length === 0 &&

@@ -1,17 +1,15 @@
 import axios from "axios";
 
 let optimizerUrl = process.env.REACT_APP_OTD_API;
-let geocodeUrl = process.env.REACT_APP_GEOCODE_API;
-let geocodeKey = process.env.REACT_APP_GEOCODE_KEY;
 
-export const reverseAddressLookup = async (lat, long) =>{
-    const response = await axios.get(`${geocodeUrl}/reverse.php?key=${geocodeKey}&lat=${lat}&lon=${long}&format=json`);
-    return response.data.display_name;
+export const getLocationByCoord = async (lat, long) =>{
+    const response = await axios.get(`${optimizerUrl}/locations?lat=${lat}&lng=${long}`);
+    return response.data['locations'][0];
 };
 
-export const addressLookup = async (address) => {
-    const response = await axios.get(`${geocodeUrl}/search.php?key=${geocodeKey}&q=${address}&format=json&limit=5`);
-    return response.data;
+export const getLocationsByAddress = async (address, limit) => {
+    const response = await axios.get(`${optimizerUrl}/locations?name=${address}&limit=${limit}`);
+    return response.data['locations'];
 };
 
 export const postUnoptimizedLocations = async (locations) => {
