@@ -4,8 +4,8 @@
 
 ## Running in Development
 * Fork the repository
+* Install [NodeJS](https://nodejs.org/en/download/) if not done already
 * Install dependencies: `npm install`
-* Create .env.development file and reference .env.example
 * Run application: `npm start`
 * Navigate to `localhost:3000` to see application running
 
