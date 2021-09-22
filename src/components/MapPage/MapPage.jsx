@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Collapse from "react-collapse";
 import ReactTooltip from "react-tooltip";
 import L from "leaflet";
 
-import Map, { MapActions, MapSearch, RouteControl, MapMarker } from "../Utils/Map/Map";
+import Map, { MapActions, MapSearch, RouteControl, MapMarker, MapSnap } from "../Utils/Map/Map";
 import {Table, TableRow} from "../Utils/Table/Table";
 import LoadingSpinner from "../Utils/LoadingSpinner";
 
@@ -27,7 +27,7 @@ const MapPage = () => {
     const [routeControlWaypoints, setRouteWaypoints] = useState([]);
     const [tableOpen, setTableOpen] = useState(false);
     
-    const controlsRef = useRef(null);
+    const controlsRef = createRef();
     const dispatch = useDispatch();
 
     const locations = useSelector(state => state.route.locations);
@@ -42,6 +42,13 @@ const MapPage = () => {
     const disableRestart = locations.length < 1 || optimizing;
     const disableOptimize = locations.length < 2 || optimizing;
 
+    const locationIterable = finishedOptimizing ? optimizedLocations : locations;
+    const snapCoord = selectedLocation &&
+        {
+            lat: locationIterable[selectedLocation].latlng.lat,
+            lon: locationIterable[selectedLocation].latlng.lng
+        };
+
     useEffect(() => {
         const waypoints = optimizedLocations.map(loc => loc.latlng);
         setRouteWaypoints(waypoints);
@@ -50,10 +57,6 @@ const MapPage = () => {
     /** Handlers */
     const handleLocationClick = idx => {
         dispatch(highlightLocationInRoute(idx));
-    };
-
-    const handleMarkerClick = index => {
-        dispatch(highlightLocationInRoute(index));
     };
 
     const optimizeRoutes = () => {
@@ -65,6 +68,8 @@ const MapPage = () => {
     };
 
     const storeClickedLocation = e => {
+        if(finishedOptimizing) return;
+
         let location = {};
 
         location.latlng = e.latlng;
@@ -74,6 +79,8 @@ const MapPage = () => {
     };
 
     const storeSearchedLocation = loc => {
+        if(finishedOptimizing) return;
+
         let location = {};
 
         location.latlng = new L.LatLng(loc.y, loc.x);
@@ -99,50 +106,37 @@ const MapPage = () => {
             return<TableRow className="no-bottom-border" key="empty" data={["", <LoadingSpinner text="Optimizing" color="#7b9c7c;"/>, ""]} /> ;
         }
 
-        if(finishedOptimizing){ 
-            return optimizedLocations.map((location, index) => {
-                const isSelected = selectedLocation === index;
-                if(index !== optimizedLocations.length - 1){
-                    return (
-                        <TableRow
-                            selected={isSelected}
-                            key={`row-${index}`}
-                            data={[String.fromCharCode(97 + index).toUpperCase(), `${location.label},`, ""]}
-                            onClick={() => handleLocationClick(index)}
-                        />
-                    );
-                } else return null;
-            });
-        } else {
-            return locations.map((location, index) => {
-                const isSelected = selectedLocation === index;
-                return (
-                    <TableRow
-                        canRemove
-                        selected={isSelected}
-                        key={`row-${index}`}
-                        data={[`${index + 1}`, `${location.label}`]}
-                        onClick={() => handleLocationClick(index)}
-                        onRemove={() => handleRemoveLocation(index)}
-                    />
-                );
-            });
-        }
+        return locationIterable.map((location, index) => {
+            const isSelected = selectedLocation === index;
+            const tableData = finishedOptimizing ? [`${index + 1}`, `${location.label},`, ""] : [`${index + 1}`, `${location.label}`];
+            if(finishedOptimizing && locationIterable.length - 1 === index) return null;
+            return (
+                <TableRow
+                    canRemove={!finishedOptimizing}
+                    selected={isSelected}
+                    key={`row-${index}`}
+                    data={tableData}
+                    onClick={() => handleLocationClick(index)}
+                    onRemove={finishedOptimizing ? null : () => handleRemoveLocation(index)}
+                />
+            );
+        });
     };
 
     const renderMapMarkers = () => {
-        return locations.map((location, index) => {
+        return locationIterable.map((location, index) => {
+            if(finishedOptimizing && index === locationIterable.length - 1) return null;
 
             const isSelected = selectedLocation === index;
-
             return(
                 <MapMarker
                     key={`marker-${index}`}
                     location={location}
                     opacity={(isSelected || selectedLocation === null) ? 1 : 0.4}
-                    onClick={() => handleMarkerClick(index)}
-                    onRemove={() => handleRemoveLocation(index)}
+                    onClick={() => handleLocationClick(index)}
+                    onRemove={finishedOptimizing ? null : () => handleRemoveLocation(index)}
                     label={`${index + 1}: ${location.label}`}
+                    forceLabelShow={isSelected}
                 />
             );
         });
@@ -163,24 +157,31 @@ const MapPage = () => {
                 <MapSearch
                     onSearch={result => storeSearchedLocation(result.location)}
                 />
+                <MapSnap
+                    snapCoord={snapCoord}
+                />
                 <RouteControl
                     waypoints={routeControlWaypoints}
                     lineColor="#ff3030"
+                    resultsHtmlContainer={controlsRef}
                 />
-                {!finishedOptimizing && renderMapMarkers()}
+                {renderMapMarkers()}
             </Map>
             {optimizing && <LoadingSpinner className="spinner" text="Optimizing" color="#ffffff" vertical/>}
             <div className="bottom-panel">
                 <div className="panel-actions">
                     {!tableOpen &&
-                        <img
-                            data-tip="Restart"
-                            data-for="restart-tooltip"
-                            alt="restart icon"
-                            className={`btn-restart panel-btn ${disableRestart ? "panel-btn-disabled" : ""}`}
-                            src={Restart}
-                            onClick={clearRoutes}
-                        />
+                        <>
+                            <img
+                                data-tip="Restart"
+                                data-for="restart-tooltip"
+                                alt="restart icon"
+                                className={`btn-restart panel-btn ${disableRestart ? "panel-btn-disabled" : ""}`}
+                                src={Restart}
+                                onClick={clearRoutes}
+                            />
+                            <ReactTooltip id="restart-tooltip"/>
+                        </>
                     }
                     <img
                         alt="panel control icon"
@@ -189,14 +190,17 @@ const MapPage = () => {
                         onClick={() => setTableOpen(open => !open)}
                     />
                     {!tableOpen &&
-                        <img
-                            data-tip="Optimize"
-                            data-for="optimize-tooltip"
-                            alt="optimize icon"
-                            className={`btn-optimize panel-btn ${disableOptimize ? "panel-btn-disabled" : ""}`}
-                            src={Optimize}
-                            onClick={optimizeRoutes}
-                        />
+                        <>
+                            <img
+                                data-tip="Optimize"
+                                data-for="optimize-tooltip"
+                                alt="optimize icon"
+                                className={`btn-optimize panel-btn ${disableOptimize ? "panel-btn-disabled" : ""}`}
+                                src={Optimize}
+                                onClick={optimizeRoutes}
+                            />
+                            <ReactTooltip id="optimize-tooltip"/>
+                        </>
                     }
                 </div>
                 <div className="location-controls">
@@ -236,8 +240,6 @@ const MapPage = () => {
                     </Collapse>
                 </div>
             </div>
-            <ReactTooltip id="restart-tooltip"/>
-            <ReactTooltip id="optimize-tooltip"/>
         </div>
     );
 };

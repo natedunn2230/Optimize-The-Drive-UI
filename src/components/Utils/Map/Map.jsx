@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import L from "leaflet";
+import React, { useEffect, useState } from "react";
+import L, { routing } from "leaflet";
 import { 
     MapContainer, TileLayer,
     useMapEvents, useMap, Marker, Popup
@@ -82,13 +82,28 @@ export const RouteControl = props => {
             styles: [{color: props.lineColor, opacity: 1, weight: 3}]
         },
         showAlternatives: false,
-        createMarker: function(i, waypoint, __n) {
-            const marker = L.marker(waypoint.latLng, {
-                icon: markerIcon
-            });
-            return marker;
+        createMarker: function(__i, __waypoint, __n) {
+            return null;
         }
     });
+
+    // useEffect(() => {
+    //     if(routeControl) {
+    //         let item;
+    //         const i = setInterval(() => {
+    //             item = document.getElementsByClassName('leaflet-routing-container')[0];
+    //             if(item) {
+    //                 const parent = item.parentNode;
+    //                 parent.removeChild(item);
+    //                 console.log(item);
+    //                 console.log('doing stuff');
+    //                 clearInterval(i);
+    //                 props.resultsHtmlContainer.current.appendChild(item);
+    //             }
+    //         }, 500);
+    //         return () => clearInterval(i);
+    //     }
+    // }, [props.resultsHtmlContainer, routeControl])
 
     useEffect(() => {
         if(props.waypoints.length > 0) map.addControl(routeControl);
@@ -100,8 +115,18 @@ export const RouteControl = props => {
 };
 
 export const MapMarker = props => {
+    const [markerRef, setMarkerRef] = useState();
+
+    useEffect(() => {
+        if(markerRef) {
+            if(props.forceLabelShow) markerRef.openPopup();
+            else markerRef.closePopup();
+        }
+    }, [markerRef, props.forceLabelShow]);
+    
     return (
         <Marker
+            ref={ref => setMarkerRef(ref)}
             id={props.id}
             icon={markerIcon}
             position={props.location.latlng}
@@ -113,15 +138,29 @@ export const MapMarker = props => {
         >
             <Popup >
                 {props.label}
-                <img
-                    className="marker-delete-btn"
-                    src={Delete}
-                    onClick={props.onRemove}
-                    alt="delete icon"
-                />
+                {props.onRemove &&
+                    <img
+                        className="marker-delete-btn"
+                        src={Delete}
+                        onClick={props.onRemove}
+                        alt="delete icon"
+                    />
+                }
             </Popup>
         </Marker>
     );
+};
+
+export const MapSnap = props => {
+    const map = useMap();
+
+    useEffect(() => {
+        if(map && props.snapCoord) {
+            map.panTo(props.snapCoord);
+        }
+    }, [props.snapCoord, map]);
+
+    return null;
 };
 
 export default Map;

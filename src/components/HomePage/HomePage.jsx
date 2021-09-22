@@ -25,6 +25,7 @@ const HomePage = () => {
     },[dispatch]);
 
     useEffect(() => {
+        if(!debouncedRouteStart) return;
         setSearching(true);
         getLocationsByAddress(debouncedRouteStart, 5).then(locations => {
             setLocationOptions(locations);
